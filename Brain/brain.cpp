@@ -106,19 +106,35 @@ long long blackKing =   0b000010000000000000000000000000000000000000000000000000
 float *pts[] = {kingPtr, queenPtr, rookPtr, bishopPtr, kingPtr, pawnPtr};
 long long myPieces[] = {whiteKing, whiteQueen, whiteBishop, whiteKnight, whiteRook, whitePawn};
 long long theirPieces[] = {blackKing, blackQueen, blackBishop, blackKnight, blackRook, blackPawn};
+int vals[] = {0, QUEENVAL, ROOKVAL, BISHOPVAL, KNIGHTVAL, PAWNVAL};
 
 
 // long board[]
 int primitiveEval(){
-    float *currPoints = queenPtr;
-    float currVal = QUEENVAL;
+    float *currPoints = kingPtr;
+    int currVal;
+    long long currMyPiece = whiteKing;
+    long long currTheirPiece = blackKing;
     float sum = 0;
-
     int i;
+
+    for(i = 63; i >= 0; i--){
+        if(currMyPiece & 1)
+            sum += currPoints[i];
+        currMyPiece = currMyPiece >> 1;
+    }
+
+    for(i = 0; i < 64; i++){
+        if(currTheirPiece & 1)
+            sum -= currPoints[i];
+        currTheirPiece >> 1;
+    }
+
     for(i = 1; i < 6; i++){
         currPoints = pts[i];
-        long long currMyPiece = myPieces[i];
-        long long currTheirPiece = theirPieces[i];
+        currMyPiece = myPieces[i];
+        currTheirPiece = theirPieces[i];
+        currVal = vals[i];
         int j;
         for(j = 63; j >= 0; j--){
         // & position with 1        
