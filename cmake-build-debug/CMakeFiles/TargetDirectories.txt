@@ -1,2 +1,0 @@
-C:/Users/Owner/Summer Projects/Chess/Brainy-Chess/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Owner/Summer Projects/Chess/Brainy-Chess/cmake-build-debug/CMakeFiles/rebuild_cache.dir
