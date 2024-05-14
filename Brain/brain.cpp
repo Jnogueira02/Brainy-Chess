@@ -90,17 +90,17 @@ float newEval(Board *myBoard){
 
         // Opponent's positions
         if(myBoard->bKing & 1)
-            sum += kingPSTRev[i];
+            sum -= kingPSTRev[i];
         if(myBoard->bQueen & 1)
-            sum += queenPSTRev[i];
+            sum -= queenPSTRev[i];
         if(myBoard->bRook & 1)
-            sum += rookPSTRev[i];
+            sum -= rookPSTRev[i];
         if(myBoard->bBishop & 1)
-            sum += bishopPSTRev[i];
+            sum -= bishopPSTRev[i];
         if(myBoard->bKnight & 1)
-            sum += knightPSTRev[i];
+            sum -= knightPSTRev[i];
         if(myBoard->bPawn & 1)
-            sum += pawnPSTRev[i];
+            sum -= pawnPSTRev[i];
 
 
         //Shifts
@@ -123,7 +123,6 @@ float newEval(Board *myBoard){
 }
 
 int main(){
-    // primitiveEval();
     auto *board = (Board *) malloc(sizeof(Board));
     board->wKing = whiteKing;
     board->wQueen = whiteQueen;
