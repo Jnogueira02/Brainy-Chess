@@ -193,19 +193,19 @@ float newEval(Board *myBoard){
     float sum = 0;
     int i;
     // Calculate Sum of Pieces
-    int wQueenSum = 9 * __builtin_popcount(myBoard->wQueen);
-    int wRookSum = 5 * __builtin_popcount(myBoard->wRook);
-    int wBishopSum = 3 * __builtin_popcount(myBoard->wBishop);
-    int wKnightSum = 3 * __builtin_popcount(myBoard->wKnight);
-    int wPawnSum = 1 * __builtin_popcount(myBoard->wPawn);
+    int wQueenSum = 9 * __builtin_popcountll(myBoard->wQueen);
+    int wRookSum = 5 * __builtin_popcountll(myBoard->wRook);
+    int wBishopSum = 3 * __builtin_popcountll(myBoard->wBishop);
+    int wKnightSum = 3 * __builtin_popcountll(myBoard->wKnight);
+    int wPawnSum = 1 * __builtin_popcountll(myBoard->wPawn);
 
     sum += wQueenSum + wRookSum + wBishopSum + wKnightSum + wPawnSum;
 
-    int bQueenSum = 9 * __builtin_popcount(myBoard->bQueen);
-    int bRookSum = 5 * __builtin_popcount(myBoard->bRook);
-    int bBishopSum = 3 * __builtin_popcount(myBoard->bBishop);
-    int bKnightSum = 3 * __builtin_popcount(myBoard->bKnight);
-    int bPawnSum = 1 * __builtin_popcount(myBoard->bPawn);
+    int bQueenSum = 9 * __builtin_popcountll(myBoard->bQueen);
+    int bRookSum = 5 * __builtin_popcountll(myBoard->bRook);
+    int bBishopSum = 3 * __builtin_popcountll(myBoard->bBishop);
+    int bKnightSum = 3 * __builtin_popcountll(myBoard->bKnight);
+    int bPawnSum = 1 * __builtin_popcountll(myBoard->bPawn);
 
     sum -= bQueenSum + bRookSum + bBishopSum + bKnightSum + bPawnSum;
 
@@ -226,17 +226,13 @@ int main(){
 
     board->bKing = blackKing;
     board->bQueen = blackQueen;
-    int count = __builtin_popcount(blackQueen);
-    printf("count: %d\n", count);
-    int bQueenCount  = __builtin_popcount(board->bQueen);
-    printf("bQueenCount: %d\n", bQueenCount);
     board->bRook = blackRook;
     board->bBishop = blackBishop;
     board->bKnight = blackKnight;
     board->bPawn = blackPawn;
 
     float res = newEval(board);
-    // printf("%f\n", res);
+    printf("%f\n", res);
 
     free(board);
     return 0;
