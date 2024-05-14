@@ -1,21 +1,22 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstdint>
 
 struct Board
 {
-    long long wKing;
-    long long wQueen;
-    long long wRook;
-    long long wKnight;
-    long long wBishop;
-    long long wPawn;
+    uint64_t wKing;
+    uint64_t wQueen;
+    uint64_t wRook;
+    uint64_t wKnight;
+    uint64_t wBishop;
+    uint64_t wPawn;
 
-    long long bKing;
-    long long bQueen;
-    long long bRook;
-    long long bKnight;
-    long long bBishop;
-    long long bPawn;
+    uint64_t bKing;
+    uint64_t bQueen;
+    uint64_t bRook;
+    uint64_t bKnight;
+    uint64_t bBishop;
+    uint64_t bPawn;
 };
 
 // Piece IDs
@@ -97,27 +98,27 @@ float *knightPtr = knightPts;
 float *pawnPtr = pawnPts;
 
 // White's Pieces
-long long whitePawn =   0b0000000000000000000000000000000000000000000000001111111100000000;
-long long whiteRook =   0b0000000000000000000000000000000000000000000000000000000010000001;
-long long whiteKnight = 0b0000000000000000000000000000000000000000000000000000000001000010;
-long long whiteBishop = 0b0000000000000000000000000000000000000000000000000000000000100100;
-long long whiteQueen =  0b0000000000000000000000000000000000000000000000000000000000010000;
-long long whiteKing =   0b0000000000000000000000000000000000000000000000000000000000001000;
+uint64_t whitePawn =   0b0000000000000000000000000000000000000000000000001111111100000000;
+uint64_t whiteRook =   0b0000000000000000000000000000000000000000000000000000000010000001;
+uint64_t whiteKnight = 0b0000000000000000000000000000000000000000000000000000000001000010;
+uint64_t whiteBishop = 0b0000000000000000000000000000000000000000000000000000000000100100;
+uint64_t whiteQueen =  0b0000000000000000000000000000000000000000000000000000000000010000;
+uint64_t whiteKing =   0b0000000000000000000000000000000000000000000000000000000000001000;
 
 // Black's Pieces
-long long blackPawn =   0b0000000011111111000000000000000000000000000000000000000000000000;
-long long blackRook =   0b1000000100000000000000000000000000000000000000000000000000000000;
-long long blackKnight = 0b0100001000000000000000000000000000000000000000000000000000000000;
-long long blackBishop = 0b0010010000000000000000000000000000000000000000000000000000000000;
-long long blackQueen =  0b0001000000000000000000000000000000000000000000000000000000000000;
-long long blackKing =   0b0000100000000000000000000000000000000000000000000000000000000000;
+uint64_t blackPawn =   0b0000000011111111000000000000000000000000000000000000000000000000;
+uint64_t blackRook =   0b1000000100000000000000000000000000000000000000000000000000000000;
+uint64_t blackKnight = 0b0100001000000000000000000000000000000000000000000000000000000000;
+uint64_t blackBishop = 0b0010010000000000000000000000000000000000000000000000000000000000;
+uint64_t blackQueen =  0b0001000000000000000000000000000000000000000000000000000000000000;
+uint64_t blackKing =   0b0000100000000000000000000000000000000000000000000000000000000000;
 
 
 
 // Array of Pointers
-float *pts[] = {kingPtr, queenPtr, rookPtr, bishopPtr, kingPtr, pawnPtr};
-long long myPieces[] = {whiteKing, whiteQueen, whiteBishop, whiteKnight, whiteRook, whitePawn};
-long long theirPieces[] = {blackKing, blackQueen, blackBishop, blackKnight, blackRook, blackPawn};
+float *pts[] = {kingPtr, queenPtr, rookPtr, bishopPtr, knightPtr, pawnPtr};
+uint64_t myPieces[] = {whiteKing, whiteQueen, whiteBishop, whiteKnight, whiteRook, whitePawn};
+uint64_t theirPieces[] = {blackKing, blackQueen, blackBishop, blackKnight, blackRook, blackPawn};
 int vals[] = {0, QUEENVAL, ROOKVAL, BISHOPVAL, KNIGHTVAL, PAWNVAL};
 
 
@@ -131,8 +132,8 @@ int vals[] = {0, QUEENVAL, ROOKVAL, BISHOPVAL, KNIGHTVAL, PAWNVAL};
 float primitiveEval(){
     float *currPoints = kingPtr;
     int currVal;
-    long long currMyPiece = whiteKing;
-    long long currTheirPiece = blackKing;
+    uint64_t currMyPiece = whiteKing;
+    uint64_t currTheirPiece = blackKing;
     float sum = 0;
     int i;
 
@@ -145,7 +146,7 @@ float primitiveEval(){
     for(i = 0; i < 64; i++){
         if(currTheirPiece & 1)
             sum -= currPoints[i];
-        currTheirPiece >> 1;
+        currTheirPiece = currTheirPiece >> 1;
     }
 
     for(i = 1; i < 6; i++){
@@ -155,8 +156,8 @@ float primitiveEval(){
         currVal = vals[i];
         int j;
         for(j = 63; j >= 0; j--){
-        // & position with 1        
-        long isMinePresent = currMyPiece & 1;
+            // & position with 1
+            uint64_t isMinePresent = currMyPiece & 1;
             if(isMinePresent){
                 // Add piece value and positional value
                 sum += currVal + currPoints[j];
@@ -166,7 +167,7 @@ float primitiveEval(){
         }
         for(j = 0; j < 64; j++){
             // & position with 1        
-            long isTheirsPresent = currTheirPiece & 1;
+            uint64_t isTheirsPresent = currTheirPiece & 1;
                 if(isTheirsPresent){
                     sum -= currVal + currPoints[j];
                 }
@@ -215,7 +216,7 @@ float newEval(Board *myBoard){
 
 int main(){
     // primitiveEval();
-    Board *board = (Board *) malloc(sizeof(Board));
+    auto *board = (Board *) malloc(sizeof(Board));
     board->wKing = whiteKing;
     board->wQueen = whiteQueen;
     board->wRook = whiteRook;
@@ -236,5 +237,7 @@ int main(){
 
     float res = newEval(board);
     // printf("%f\n", res);
+
+    free(board);
     return 0;
 }
