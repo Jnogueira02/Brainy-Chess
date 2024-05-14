@@ -54,7 +54,6 @@ uint64_t blackKing =   0b0000100000000000000000000000000000000000000000000000000
 
 float newEval(Board *myBoard){
     float sum = 0;
-    int i;
     // Calculate Sum of Pieces
     int wQueenSum = 9 * __builtin_popcountll(myBoard->wQueen);
     int wRookSum = 5 * __builtin_popcountll(myBoard->wRook);
@@ -73,6 +72,52 @@ float newEval(Board *myBoard){
     sum -= bQueenSum + bRookSum + bBishopSum + bKnightSum + bPawnSum;
 
     // Piece Square Tables
+    int i;
+    for(i = 63; i >= 0; i--){
+        // Player's positions // Simplify later
+        if(myBoard->wKing & 1)
+            sum += kingPST[i];
+        if(myBoard->wQueen & 1)
+            sum += queenPST[i];
+         if(myBoard->wRook & 1)
+            sum += rookPST[i];       
+        if(myBoard->wBishop & 1)
+            sum += bishopPST[i];
+        if(myBoard->wKnight & 1)
+            sum += knightPST[i];
+        if(myBoard->wPawn & 1)
+            sum += pawnPST[i];
+
+        // Opponent's positions
+        if(myBoard->bKing & 1)
+            sum += kingPSTRev[i];
+        if(myBoard->bQueen & 1)
+            sum += queenPSTRev[i];
+        if(myBoard->bRook & 1)
+            sum += rookPSTRev[i];
+        if(myBoard->bBishop & 1)
+            sum += bishopPSTRev[i];
+        if(myBoard->bKnight & 1)
+            sum += knightPSTRev[i];
+        if(myBoard->bPawn & 1)
+            sum += pawnPSTRev[i];
+
+
+        //Shifts
+        myBoard->wKing = myBoard->wKing >> 1;
+        myBoard->wQueen = myBoard->wQueen >> 1;
+        myBoard->wRook = myBoard->wRook >> 1;
+        myBoard->wBishop = myBoard->wBishop >> 1;
+        myBoard->wKnight = myBoard->wKnight >> 1;
+        myBoard->wPawn = myBoard->wPawn >> 1;
+
+        myBoard->bKing = myBoard->bKing >> 1;
+        myBoard->bQueen = myBoard->bQueen >> 1;
+        myBoard->bRook = myBoard->bRook >> 1;
+        myBoard->bBishop = myBoard->bBishop >> 1;
+        myBoard->bKnight = myBoard->bKnight >> 1;
+        myBoard->bPawn = myBoard->bPawn >> 1;
+    }
 
     return sum;
 }
