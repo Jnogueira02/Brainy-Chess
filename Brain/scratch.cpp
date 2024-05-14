@@ -1,7 +1,11 @@
 #include <stdio.h>
+#include "PieceSquareTables.h"
+
+// g++ scratch.cpp PieceSquareTables.cpp -o scratch
 
 int main(){
-    char x = 0b10010100;
-    printf("%d\n", x);
+    float f = kingPST[0];
+    // float f = 3.0;
+    printf("%f\n", f);
     return 0;
 }
