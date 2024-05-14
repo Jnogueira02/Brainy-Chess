@@ -1,9 +1,7 @@
 #include <stdio.h>
 
 int main(){
-    long x = 2;
-    int y = 3;
-    printf("%d\n", x+y);
-
+    char x = 0b10010100;
+    printf("%d\n", x);
     return 0;
 }

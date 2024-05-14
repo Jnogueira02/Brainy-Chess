@@ -1,9 +1,21 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 struct Board
 {
-    long whitePosition[6];
-    long blackPosition[6];
+    long long wKing;
+    long long wQueen;
+    long long wRook;
+    long long wKnight;
+    long long wBishop;
+    long long wPawn;
+
+    long long bKing;
+    long long bQueen;
+    long long bRook;
+    long long bKnight;
+    long long bBishop;
+    long long bPawn;
 };
 
 // Piece IDs
@@ -109,8 +121,14 @@ long long theirPieces[] = {blackKing, blackQueen, blackBishop, blackKnight, blac
 int vals[] = {0, QUEENVAL, ROOKVAL, BISHOPVAL, KNIGHTVAL, PAWNVAL};
 
 
-// long board[]
-int primitiveEval(){
+
+
+
+
+
+
+
+float primitiveEval(){
     float *currPoints = kingPtr;
     int currVal;
     long long currMyPiece = whiteKing;
@@ -158,10 +176,65 @@ int primitiveEval(){
     }
 
     printf("%f\n", sum);
-    return 0;
+    return sum;
+}
+
+
+
+
+
+
+
+
+
+
+float newEval(Board *myBoard){
+    float sum = 0;
+    int i;
+    // Calculate Sum of Pieces
+    int wQueenSum = 9 * __builtin_popcount(myBoard->wQueen);
+    int wRookSum = 5 * __builtin_popcount(myBoard->wRook);
+    int wBishopSum = 3 * __builtin_popcount(myBoard->wBishop);
+    int wKnightSum = 3 * __builtin_popcount(myBoard->wKnight);
+    int wPawnSum = 1 * __builtin_popcount(myBoard->wPawn);
+
+    sum += wQueenSum + wRookSum + wBishopSum + wKnightSum + wPawnSum;
+
+    int bQueenSum = 9 * __builtin_popcount(myBoard->bQueen);
+    int bRookSum = 5 * __builtin_popcount(myBoard->bRook);
+    int bBishopSum = 3 * __builtin_popcount(myBoard->bBishop);
+    int bKnightSum = 3 * __builtin_popcount(myBoard->bKnight);
+    int bPawnSum = 1 * __builtin_popcount(myBoard->bPawn);
+
+    sum -= bQueenSum + bRookSum + bBishopSum + bKnightSum + bPawnSum;
+
+    // Piece Square Tables
+
+    return sum;
 }
 
 int main(){
-    primitiveEval();
+    // primitiveEval();
+    Board *board = (Board *) malloc(sizeof(Board));
+    board->wKing = whiteKing;
+    board->wQueen = whiteQueen;
+    board->wRook = whiteRook;
+    board->wBishop = whiteBishop;
+    board->wKnight = whiteKnight;
+    board->wPawn = whitePawn;
+
+    board->bKing = blackKing;
+    board->bQueen = blackQueen;
+    int count = __builtin_popcount(blackQueen);
+    printf("count: %d\n", count);
+    int bQueenCount  = __builtin_popcount(board->bQueen);
+    printf("bQueenCount: %d\n", bQueenCount);
+    board->bRook = blackRook;
+    board->bBishop = blackBishop;
+    board->bKnight = blackKnight;
+    board->bPawn = blackPawn;
+
+    float res = newEval(board);
+    // printf("%f\n", res);
     return 0;
 }
