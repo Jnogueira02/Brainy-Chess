@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstdint>
+#include "PieceSquareTables.h"
 
 struct Board
 {
@@ -89,14 +90,6 @@ float pawnPts[64] = {      0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
                            0.5,  1.0,  1.0, -2.0, -2.0,  1.0,  1.0,  0.5,
                            0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0};
 
-// Points Pointers
-float *kingPtr = kingPts;
-float *queenPtr = queenPts;
-float *rookPtr = rookPts;
-float *bishopPtr = bishopPts;
-float *knightPtr = knightPts;
-float *pawnPtr = pawnPts;
-
 // White's Pieces
 uint64_t whitePawn =   0b0000000000000000000000000000000000000000000000001111111100000000;
 uint64_t whiteRook =   0b0000000000000000000000000000000000000000000000000000000010000001;
@@ -112,81 +105,6 @@ uint64_t blackKnight = 0b0100001000000000000000000000000000000000000000000000000
 uint64_t blackBishop = 0b0010010000000000000000000000000000000000000000000000000000000000;
 uint64_t blackQueen =  0b0001000000000000000000000000000000000000000000000000000000000000;
 uint64_t blackKing =   0b0000100000000000000000000000000000000000000000000000000000000000;
-
-
-
-// Array of Pointers
-float *pts[] = {kingPtr, queenPtr, rookPtr, bishopPtr, knightPtr, pawnPtr};
-uint64_t myPieces[] = {whiteKing, whiteQueen, whiteBishop, whiteKnight, whiteRook, whitePawn};
-uint64_t theirPieces[] = {blackKing, blackQueen, blackBishop, blackKnight, blackRook, blackPawn};
-int vals[] = {0, QUEENVAL, ROOKVAL, BISHOPVAL, KNIGHTVAL, PAWNVAL};
-
-
-
-
-
-
-
-
-
-float primitiveEval(){
-    float *currPoints = kingPtr;
-    int currVal;
-    uint64_t currMyPiece = whiteKing;
-    uint64_t currTheirPiece = blackKing;
-    float sum = 0;
-    int i;
-
-    for(i = 63; i >= 0; i--){
-        if(currMyPiece & 1)
-            sum += currPoints[i];
-        currMyPiece = currMyPiece >> 1;
-    }
-
-    for(i = 0; i < 64; i++){
-        if(currTheirPiece & 1)
-            sum -= currPoints[i];
-        currTheirPiece = currTheirPiece >> 1;
-    }
-
-    for(i = 1; i < 6; i++){
-        currPoints = pts[i];
-        currMyPiece = myPieces[i];
-        currTheirPiece = theirPieces[i];
-        currVal = vals[i];
-        int j;
-        for(j = 63; j >= 0; j--){
-            // & position with 1
-            uint64_t isMinePresent = currMyPiece & 1;
-            if(isMinePresent){
-                // Add piece value and positional value
-                sum += currVal + currPoints[j];
-            }
-            // Shift right
-            currMyPiece = currMyPiece >> 1;
-        }
-        for(j = 0; j < 64; j++){
-            // & position with 1        
-            uint64_t isTheirsPresent = currTheirPiece & 1;
-                if(isTheirsPresent){
-                    sum -= currVal + currPoints[j];
-                }
-                // Shift right
-                currTheirPiece = currTheirPiece >> 1;
-        }
-    }
-
-    printf("%f\n", sum);
-    return sum;
-}
-
-
-
-
-
-
-
-
 
 
 float newEval(Board *myBoard){
