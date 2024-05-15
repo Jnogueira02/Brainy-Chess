@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstdint>
+#include <iostream>
 #include "PieceSquareTables.h"
 
 struct Board
@@ -52,6 +53,7 @@ uint64_t blackQueen =  0b0001000000000000000000000000000000000000000000000000000
 uint64_t blackKing =   0b0000100000000000000000000000000000000000000000000000000000000000;
 
 
+// Evaluate the score of white based on pieces left and piece square tables
 float newEval(Board *myBoard){
     float sum = 0;
     // Calculate Sum of Pieces
@@ -122,7 +124,16 @@ float newEval(Board *myBoard){
     return sum;
 }
 
-int main(){
+void generateMoves(){
+
+}
+
+bool isOccupied(Board *myBoard, int position){
+    return (myBoard->wKing | myBoard->wQueen | myBoard->wRook | myBoard->wBishop | myBoard->wKnight | myBoard->wPawn |
+    myBoard->bKing | myBoard->bQueen | myBoard->bRook | myBoard->bBishop | myBoard->bKnight | myBoard->bPawn) & (0b1 << position);
+}
+
+Board *populate(){
     auto *board = (Board *) malloc(sizeof(Board));
     board->wKing = whiteKing;
     board->wQueen = whiteQueen;
@@ -138,9 +149,12 @@ int main(){
     board->bKnight = blackKnight;
     board->bPawn = blackPawn;
 
-    float res = newEval(board);
-    printf("%f\n", res);
+    return board;
+}
 
-    free(board);
+int main(){
+    Board *myBoard = populate();
+    bool occupied = isOccupied(myBoard, 16);
+    std::cout << occupied;
     return 0;
 }
