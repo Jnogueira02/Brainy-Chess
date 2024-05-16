@@ -1,1 +1,1 @@
-- Separate piece square tables into separate file
+- Generate moves
