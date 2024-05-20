@@ -109,6 +109,6 @@ void generate_Rook(){
 int main(){
     uint64_t rook = 0b0000000000000000000000000000000000000000000000000000000000000001;
     auto [minVal, maxVal] = calculateRank(rook);
-    std::cout << "Min" << minVal << std::endl;
+    std::cout << "Min " << minVal << std::endl;
     return 0;
 }
