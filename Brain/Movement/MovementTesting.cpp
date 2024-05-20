@@ -79,6 +79,9 @@ std::tuple<uint64_t, uint64_t> calculateRank(uint64_t piece){
         return std::make_tuple(0x8000000000000000, 0x0100000000000000);
 }
 
+/* Return inclusive tuple (maxValue, minValue),
+    where maxValue is the forwardmost square of a given rank,
+    and minValue is the backmost*/ 
 std::tuple<uint64_t, uint64_t> calculateFile(uint64_t piece){
     // A File
     if(piece & 0x8080808080808080)
@@ -115,7 +118,7 @@ void generate_Rook(){
 
 int main(){
     uint64_t rook = 0b0000000000000000000000000000000000000000000000000000000000000001;
-    auto [maxVal, minVal] = calculateRank(rook);
-    std::cout << "Min " << minVal << std::endl;
+    auto [maxVal, minVal] = calculateFile(rook);
+    std::cout << "Min " << minVal <<  " Max " << maxVal << std::endl;
     return 0;
 }
