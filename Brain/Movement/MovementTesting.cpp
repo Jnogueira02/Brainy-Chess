@@ -48,6 +48,11 @@ uint64_t move_rook(uint64_t rook, int direction, int n){
     return rook;
 }
 
+void generate_Rook(uint64_t rook){
+    auto [minRank, maxRank] = calculateFile(rook);
+    auto [minFile, maxFile] = calculateRank(rook);
+}
+
 
 /* Return inclusive tuple (maxValue, minValue),
     where maxValue is the leftmost square of a given rank,
@@ -85,40 +90,36 @@ std::tuple<uint64_t, uint64_t> calculateRank(uint64_t piece){
 std::tuple<uint64_t, uint64_t> calculateFile(uint64_t piece){
     // A File
     if(piece & 0x8080808080808080)
-        return std::make_tuple(0x8000000000000000, 0x0000000000000080);
+        return std::make_tuple(0x0000000000000080, 0x8000000000000000);
     // B File
     else if(piece & 0x4040404040404040)
-        return std::make_tuple(0x4000000000000000, 0x0000000000000040);
+        return std::make_tuple(0x0000000000000040, 0x4000000000000000);
     // C File
     else if(piece & 0x2020202020202020)
-        return std::make_tuple(0x2000000000000000, 0x0000000000000020);
+        return std::make_tuple(0x0000000000000020, 0x2000000000000000);
     // D File
     else if(piece & 0x1010101010101010)
-        return std::make_tuple(0x1000000000000000, 0x0000000000000010);
+        return std::make_tuple(0x0000000000000010, 0x1000000000000000);
     // E File
     else if(piece & 0x0808080808080808)
-        return std::make_tuple(0x0800000000000000, 0x0000000000000008);
+        return std::make_tuple(0x0000000000000008, 0x0800000000000000);
     // F File
     else if(piece & 0x0404040404040404)
-        return std::make_tuple(0x0400000000000000, 0x0000000000000004);
+        return std::make_tuple(0x0000000000000004, 0x0400000000000000);
     // G File
     else if(piece & 0x0202020202020202)
-        return std::make_tuple(0x0200000000000000, 0x0000000000000002);
+        return std::make_tuple(0x0000000000000002, 0x0200000000000000);
     // H File
     else
-        return std::make_tuple(0x0100000000000000, 0x0000000000000001);
+        return std::make_tuple(0x0000000000000001, 0x0100000000000000);
 }
 
 // Need to explicitly define the difference between current position and Tmax in bytes.
 // Cannot rely on result of x << 64 being 0 or 1
 
-void generate_Rook(){
-
-}
-
 int main(){
     uint64_t rook = 0b0000000000000000000000000000000000000000000000000000000000000001;
-    auto [maxVal, minVal] = calculateFile(rook);
-    std::cout << "Min " << minVal <<  " Max " << maxVal << std::endl;
+    // auto [minVal, maxVal] = calculateFile(rook);
+    // std::cout << "Min " << minVal <<  " Max " << maxVal << std::endl;
     return 0;
 }
