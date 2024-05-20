@@ -25,29 +25,29 @@ void print_board(uint64_t num){
     and minValue is the rightmost*/ 
 std::tuple<uint64_t, uint64_t> calculateRank(uint64_t piece){
     // Rank 1
-    if(piece & 0x00000000000000FF)
-        return std::make_tuple(0x0000000000000001, 0x0000000000000080);
+    if(piece & 0x00000000000000FFULL)
+        return std::make_tuple(0x0000000000000001ULL, 0x0000000000000080ULL);
     // Rank 2
-    else if(piece & 0x000000000000FF00)
-        return std::make_tuple(0x0000000000000100, 0x0000000000008000);
+    else if(piece & 0x000000000000FF00ULL)
+        return std::make_tuple(0x0000000000000100ULL, 0x0000000000008000ULL);
     // Rank 3
-    else if(piece & 0x0000000000FF0000)
-        return std::make_tuple(0x0000000000010000, 0x0000000000800000);
+    else if(piece & 0x0000000000FF0000ULL)
+        return std::make_tuple(0x0000000000010000ULL, 0x0000000000800000ULL);
     // Rank 4
-    else if(piece & 0x00000000FF000000)
-        return std::make_tuple(0x0000000001000000, 0x0000000080000000);
+    else if(piece & 0x00000000FF000000ULL)
+        return std::make_tuple(0x0000000001000000ULL, 0x0000000080000000ULL);
     // Rank 5
-    else if(piece & 0x000000FF00000000)
-        return std::make_tuple(0x0000000100000000, 0x0000008000000000);
+    else if(piece & 0x000000FF00000000ULL)
+        return std::make_tuple(0x0000000100000000ULL, 0x0000008000000000ULL);
     // Rank 6
-    else if(piece & 0x0000FF0000000000)
-        return std::make_tuple(0x0000010000000000, 0x0000800000000000);
+    else if(piece & 0x0000FF0000000000ULL)
+        return std::make_tuple(0x0000010000000000ULL, 0x0000800000000000ULL);
     // Rank 7
-    else if(piece & 0x00FF000000000000)
-        return std::make_tuple(0x0001000000000000, 0x0080000000000000);
+    else if(piece & 0x00FF000000000000ULL)
+        return std::make_tuple(0x0001000000000000ULL, 0x0080000000000000ULL);
     // Rank 8
     else
-        return std::make_tuple(0x0100000000000000, 0x8000000000000000);
+        return std::make_tuple(0x0100000000000000ULL, 0x8000000000000000ULL);
 }
 
 /* Return inclusive tuple (minValue, maxValue),
@@ -55,29 +55,29 @@ std::tuple<uint64_t, uint64_t> calculateRank(uint64_t piece){
     and minValue is the backmost*/ 
 std::tuple<uint64_t, uint64_t> calculateFile(uint64_t piece){
     // A File
-    if(piece & 0x8080808080808080)
-        return std::make_tuple(0x0000000000000080, 0x8000000000000000);
+    if(piece & 0x8080808080808080ULL)
+        return std::make_tuple(0x0000000000000080ULL, 0x8000000000000000ULL);
     // B File
-    else if(piece & 0x4040404040404040)
-        return std::make_tuple(0x0000000000000040, 0x4000000000000000);
+    else if(piece & 0x4040404040404040ULL)
+        return std::make_tuple(0x0000000000000040ULL, 0x4000000000000000ULL);
     // C File
-    else if(piece & 0x2020202020202020)
-        return std::make_tuple(0x0000000000000020, 0x2000000000000000);
+    else if(piece & 0x2020202020202020ULL)
+        return std::make_tuple(0x0000000000000020ULL, 0x2000000000000000ULL);
     // D File
-    else if(piece & 0x1010101010101010)
-        return std::make_tuple(0x0000000000000010, 0x1000000000000000);
+    else if(piece & 0x1010101010101010ULL)
+        return std::make_tuple(0x0000000000000010ULL, 0x1000000000000000ULL);
     // E File
-    else if(piece & 0x0808080808080808)
-        return std::make_tuple(0x0000000000000008, 0x0800000000000000);
+    else if(piece & 0x0808080808080808ULL)
+        return std::make_tuple(0x0000000000000008ULL, 0x0800000000000000ULL);
     // F File
-    else if(piece & 0x0404040404040404)
-        return std::make_tuple(0x0000000000000004, 0x0400000000000000);
+    else if(piece & 0x0404040404040404ULL)
+        return std::make_tuple(0x0000000000000004ULL, 0x0400000000000000ULL);
     // G File
-    else if(piece & 0x0202020202020202)
-        return std::make_tuple(0x0000000000000002, 0x0200000000000000);
+    else if(piece & 0x0202020202020202ULL)
+        return std::make_tuple(0x0000000000000002ULL, 0x0200000000000000ULL);
     // H File
     else
-        return std::make_tuple(0x0000000000000001, 0x0100000000000000);
+        return std::make_tuple(0x0000000000000001ULL, 0x0100000000000000ULL);
 }
 
 
@@ -88,21 +88,19 @@ uint64_t move_rook(uint64_t rook, int direction, int n){
     {
     // Forward
     case 0:
-        rook = rook << (n * 8);
+        rook <<= (n * 8);
         break;
     // Right
     case 1:
-        rook = rook >> (1 * n);
+        rook >>= (1 * n);
         break;
     // Backward
     case 2:
-        rook = rook >> (n * 8);
+        rook >>= (n * 8);
         break;
     // Left
-    case 3:
-        rook = rook << (1 * n);
-        break;
     default:
+        rook <<= (1 * n);
         break;
     }
 
