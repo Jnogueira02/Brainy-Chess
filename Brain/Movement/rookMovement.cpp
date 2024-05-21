@@ -12,7 +12,7 @@ void print_board(uint64_t num){
         for(j = 0; j <8; j++){
             uint64_t bit = num & mask;
             bit >>= shift;
-            printf("%lld", bit);
+            printf("%lld ", bit);
             mask >>= 1;
             shift--;
         }
@@ -146,7 +146,8 @@ void generate_Rook(uint64_t rook){
 
 
 int main(){
-    uint64_t rook = 0b1000000000000000000000000000000000000000000000000000000000000000;
+    uint64_t rook = 0x0080000000000000;
+    print_board(rook);
     generate_Rook(rook);
     return 0;
 }
