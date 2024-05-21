@@ -22,7 +22,7 @@ void print_board(uint64_t num){
     printf("\n");
 }
 
-uint64_t move_knight(uint64_t knight, int direction /*no int n*/){
+uint64_t move_knight(uint64_t knight, int direction){
     switch(direction){
         // Up 2, Right 1
         case 0:
