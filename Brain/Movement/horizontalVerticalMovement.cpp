@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <iostream>
 #include <tuple>
+#include <unordered_set>
 
 void print_board(uint64_t num){
     uint64_t mask = UINT64_MAX;
@@ -108,7 +109,7 @@ uint64_t move_rook(uint64_t rook, int direction, int n){
 }
 
 // Maybe have a limit of number of squares we can move in a given direction...
-void generate_Rook(uint64_t rook){
+std::unordered_set<int> generate_Rook(uint64_t rook){
     auto [minRank, maxRank] = calculateRank(rook);
     auto [minFile, maxFile] = calculateFile(rook);
     uint64_t rookTmp = rook;
@@ -118,36 +119,47 @@ void generate_Rook(uint64_t rook){
     int forwardShift = 0;
     int backShift = 0;
 
+    std::unordered_set<int> resMoves = {};
+
     // # of squares to left // Is there a more efficient way to do this?
     while(rookTmp != maxRank){
         rookTmp <<= 1;
         leftShift++;
+        resMoves.insert(leftShift);
     }
     rookTmp = rook;
     // # of squares to right
     while(rookTmp != minRank){
         rookTmp >>=  1;
         rightShift++;
+        resMoves.insert(-rightShift);
     }
     rookTmp = rook;
     // # of squares forwards
     while(rookTmp != maxFile){
         rookTmp <<= 8;
         forwardShift++;
+        resMoves.insert(forwardShift * 8);
     }
     rookTmp = rook;
     // # of squares backwards
     while(rookTmp != minFile){
         rookTmp >>= 8;
         backShift++;
+        resMoves.insert(backShift * -8);
     }
-    printf("Forward: %d\nRight: %d\nBack: %d\nLeft: %d\n\n", forwardShift, rightShift, backShift, leftShift);
+    return resMoves;
 }
 
 
 int main(){
-    uint64_t rook = 0x0080000000000000;
+    uint64_t rook = 0x0000100000000000;
     print_board(rook);
-    generate_Rook(rook);
+    std::unordered_set<int> moves = generate_Rook(rook);
+
+    for(int elt: moves){
+        std::cout << elt << " ";
+    }
+    std::cout << std::endl;
     return 0;
 }
