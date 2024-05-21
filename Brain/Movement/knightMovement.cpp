@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <iostream>
 #include <tuple>
+#include <unordered_set>
 
 void print_board(uint64_t num){
     uint64_t mask = UINT64_MAX;
@@ -59,9 +60,41 @@ uint64_t move_knight(uint64_t knight, int direction /*no int n*/){
     return knight;                                                                                   
 }
 
+std::unordered_set<int> knightMoves = {15, 6, -10, -17, -15, -5, 10, 17};
+// Maybe store right shifts as negative numbers (can be reversed later)
+// May not be necessary to check for all masks
+std::unordered_set<int> generate_knight(uint64_t knight){
+    std::unordered_set<int> resMoves = knightMoves;
+
+    // Right two columns
+    if(knight & 0x0303030303030303){
+        resMoves.erase(6);
+        resMoves.erase(-10);
+    }
+    // Left two columns
+    else if(knight & 0xC0C0C0C0C0C0C0C0){
+        resMoves.erase(-6);
+        resMoves.erase(10);
+    }
+    
+    // Top two rows
+    if(knight & 0xFFFF000000000000){
+        resMoves.erase(15);
+        resMoves.erase(17);
+    }
+    // Bottom two rows
+    else if(knight & 0x000000000000FFFF){
+        resMoves.erase(-15);
+        resMoves.erase(-17);
+    }
+
+    return resMoves;
+}
+
 int main(){
     uint64_t knight = 0x0000000000200000ULL;
-    print_board(knight);
-    print_board(move_knight(knight, 0));
+    // print_board(knight);
+    // print_board(move_knight(knight, 0));
+    print_board(0x000000000000FFFF);
     return 0;
 }
