@@ -1,2 +1,1 @@
-- Generate moves
-- Update gcc / c++ version
+- Generate set of moves for each piece
