@@ -4,6 +4,8 @@
 #include <tuple>
 #include <unordered_set>
 
+#include "diagonalMovement.hpp"
+
 void print_board(uint64_t num){
     uint64_t mask = UINT64_MAX;
     int i;

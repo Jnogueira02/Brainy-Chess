@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <unordered_set>
 
-std::unordered_set<int> generate_bishop(uint64_t bishop){}
-uint64_t move_bishop(uint64_t bishop, int direction, int n){}
+std::unordered_set<int> generate_bishop(uint64_t bishop);
+uint64_t move_bishop(uint64_t bishop, int direction, int n);
 
 #endif

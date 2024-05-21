@@ -1,6 +1,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <iostream>
+#include "diagonalMovement.hpp"
 
 // White's Pieces
 uint64_t whitePawn =   0x000000000000FF00;
@@ -38,6 +39,8 @@ void print_board(uint64_t num){
 int main(){
     uint64_t board = whitePawn | whiteRook | whiteKnight | whiteBishop | whiteQueen | whiteKing |
                         blackPawn | blackRook | blackKnight | blackBishop | blackQueen | blackKing;
-    print_board(board);
+    // print_board(board);
+    std::unordered_set<int> moves = generate_bishop(whiteBishop);
+    
     return 0;
 }
