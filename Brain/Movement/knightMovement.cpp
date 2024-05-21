@@ -18,39 +18,50 @@ void print_board(uint64_t num){
         }
         printf("\n");
     }
+    printf("\n");
 }
 
 uint64_t move_knight(uint64_t knight, int direction /*no int n*/){
     switch(direction){
         // Up 2, Right 1
         case 0:
-            return knight << 15;
+            knight <<= 15;
             break;
         // Right 2, Up 1
         case 1:
+            knight <<= 6;
             break;
         // Right 2, Down 1
         case 2:
+            knight >>= 10;
             break;
         // Down 2, Right 1
         case 3:
+            knight >>= 17;
             break;
         // Down 2, Left 1
         case 4:
+            knight >>= 15;
             break;
         // Left 2, Down 1
         case 5:
+            knight >>= 6;
             break;
         // Left 2, Up 1
         case 6:
+            knight <<= 10;
             break;
         // Up 2, Left 1
         default:
-            break;                                                                                    
+            knight <<= 17;
+            break; 
     }
+    return knight;                                                                                   
 }
 
 int main(){
-    print_board(move_knight(0x0000000000000001ULL, 0));
+    uint64_t knight = 0x0000000000200000ULL;
+    print_board(knight);
+    print_board(move_knight(knight, 0));
     return 0;
 }
