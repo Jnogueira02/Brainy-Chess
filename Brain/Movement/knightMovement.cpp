@@ -60,7 +60,7 @@ uint64_t move_knight(uint64_t knight, int direction /*no int n*/){
     return knight;                                                                                   
 }
 
-std::unordered_set<int> knightMoves = {15, 6, -10, -17, -15, -5, 10, 17};
+std::unordered_set<int> knightMoves = {15, 6, -10, -17, -15, -6, 10, 17};
 // Maybe store right shifts as negative numbers (can be reversed later)
 // May not be necessary to check for all masks
 std::unordered_set<int> generate_knight(uint64_t knight){
@@ -87,14 +87,16 @@ std::unordered_set<int> generate_knight(uint64_t knight){
         resMoves.erase(-15);
         resMoves.erase(-17);
     }
-
     return resMoves;
 }
 
 int main(){
-    uint64_t knight = 0x0000000000200000ULL;
-    // print_board(knight);
-    // print_board(move_knight(knight, 0));
-    print_board(0x000000000000FFFF);
+    uint64_t knight = 0x0000000800000000;
+    print_board(0x0000000800000000);
+    std::unordered_set<int> moves = generate_knight(knight);
+    for(int elt : moves){
+        std::cout << elt << " ";
+    }
+    std::cout << std::endl;
     return 0;
 }
