@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <iostream>
 #include <tuple>
+#include <unordered_set>
 
 void print_board(uint64_t num){
     uint64_t mask = UINT64_MAX;
@@ -86,36 +87,41 @@ std::tuple<uint64_t, uint64_t> calculateMinorDiag(uint64_t piece){ //Don't have 
         return std::make_tuple(0x0000000000000001ULL, 0x0000000000000001ULL);         
 }
 
-std::tuple<uint64_t, uint64_t, uint64_t, uint64_t> generate_bishop(uint64_t bishop){
+std::unordered_set<int> generate_bishop(uint64_t bishop){
+    auto[minMain, maxMain] = calculateMainDiag(bishop);
+    auto[minMinor, maxMinor] = calculateMinorDiag(bishop);
     uint64_t upRight = 0;
     uint64_t downRight = 0;
     uint64_t downLeft = 0;
     uint64_t upLeft = 0;
     uint64_t tempBishop = bishop;
 
-    auto[minMain, maxMain] = calculateMainDiag(bishop);
-    auto[minMinor, maxMinor] = calculateMinorDiag(bishop);
+    std::unordered_set<int> resMoves = {};
 
     while(tempBishop != maxMain){
         tempBishop <<= 9;
         upLeft++;
+        resMoves.insert(upLeft * 9);
     }
     tempBishop = bishop;
     while(tempBishop != minMain){
         tempBishop >>= 9;
         downRight++;
+        resMoves.insert(downRight * -9);
     }
     tempBishop = bishop;
     while(tempBishop != maxMinor){
         tempBishop <<= 7;
         upRight++;
+        resMoves.insert(upRight * 7);
     }
     tempBishop = bishop;
     while(tempBishop != minMinor){
         tempBishop >>= 7;
         downLeft++;
+        resMoves.insert(downLeft * -7);
     }
-    return std::make_tuple(upRight, downRight, downLeft, upLeft);
+    return resMoves;
 }
 
 uint64_t move_bishop(uint64_t bishop, int direction, int n){
@@ -137,9 +143,12 @@ uint64_t move_bishop(uint64_t bishop, int direction, int n){
 }
 
 int main(){
-    uint64_t bishop = 0x0000000800000000ULL;
+    uint64_t bishop = 0x0000000800000000;
     print_board(bishop);
-    auto[upRight, downRight, downLeft, upLeft] = generate_bishop(bishop);
-    std::cout << "Up Right: " << upRight << "\nDown Right: " << downRight << "\nDown Left: " << downLeft << "\nUp Left: " << upLeft << std::endl;
+    std::unordered_set<int> moves = generate_bishop(bishop);
+    for(int elt : moves){
+        std::cout << elt << " ";
+    }
+    std::cout << std::endl;
     return 0;
 }
