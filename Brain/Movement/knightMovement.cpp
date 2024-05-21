@@ -20,6 +20,37 @@ void print_board(uint64_t num){
     }
 }
 
+uint64_t move_knight(uint64_t knight, int direction /*no int n*/){
+    switch(direction){
+        // Up 2, Right 1
+        case 0:
+            return knight << 15;
+            break;
+        // Right 2, Up 1
+        case 1:
+            break;
+        // Right 2, Down 1
+        case 2:
+            break;
+        // Down 2, Right 1
+        case 3:
+            break;
+        // Down 2, Left 1
+        case 4:
+            break;
+        // Left 2, Down 1
+        case 5:
+            break;
+        // Left 2, Up 1
+        case 6:
+            break;
+        // Up 2, Left 1
+        default:
+            break;                                                                                    
+    }
+}
+
 int main(){
+    print_board(move_knight(0x0000000000000001ULL, 0));
     return 0;
 }
