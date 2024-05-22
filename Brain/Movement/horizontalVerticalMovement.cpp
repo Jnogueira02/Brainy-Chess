@@ -4,22 +4,7 @@
 #include <tuple>
 #include <unordered_set>
 
-void print_board(uint64_t num){
-    uint64_t mask = UINT64_MAX;
-    int i;
-    int shift = 63;
-    for(i = 0; i < 8; i++){
-        int j;
-        for(j = 0; j <8; j++){
-            uint64_t bit = num & mask;
-            bit >>= shift;
-            printf("%lld ", bit);
-            mask >>= 1;
-            shift--;
-        }
-        printf("\n");
-    }
-}
+#include "horizontalVerticalMovement.hpp"
 
 /* Return inclusive tuple (minValue, maxValue),
     where maxValue is the leftmost square of a given rank,
@@ -149,17 +134,4 @@ std::unordered_set<int> generate_Rook(uint64_t rook){
         resMoves.insert(backShift * -8);
     }
     return resMoves;
-}
-
-
-int main(){
-    uint64_t rook = 0x0000100000000000;
-    print_board(rook);
-    std::unordered_set<int> moves = generate_Rook(rook);
-
-    for(int elt: moves){
-        std::cout << elt << " ";
-    }
-    std::cout << std::endl;
-    return 0;
 }

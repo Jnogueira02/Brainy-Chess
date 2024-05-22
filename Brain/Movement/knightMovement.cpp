@@ -4,23 +4,7 @@
 #include <tuple>
 #include <unordered_set>
 
-void print_board(uint64_t num){
-    uint64_t mask = UINT64_MAX;
-    int i;
-    int shift = 63;
-    for(i = 0; i < 8; i++){
-        int j;
-        for(j = 0; j <8; j++){
-            uint64_t bit = num & mask;
-            bit >>= shift;
-            printf("%lld ", bit);
-            mask >>= 1;
-            shift--;
-        }
-        printf("\n");
-    }
-    printf("\n");
-}
+#include "knightMovement.hpp"
 
 uint64_t move_knight(uint64_t knight, int direction){
     switch(direction){
@@ -88,15 +72,4 @@ std::unordered_set<int> generate_knight(uint64_t knight){
         resMoves.erase(-17);
     }
     return resMoves;
-}
-
-int main(){
-    uint64_t knight = 0x0000000800000000;
-    print_board(0x0000000800000000);
-    std::unordered_set<int> moves = generate_knight(knight);
-    for(int elt : moves){
-        std::cout << elt << " ";
-    }
-    std::cout << std::endl;
-    return 0;
 }

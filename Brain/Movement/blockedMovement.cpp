@@ -1,7 +1,10 @@
 #include <cstdint>
 #include <cstdio>
 #include <iostream>
+
 #include "diagonalMovement.hpp"
+#include "horizontalVerticalMovement.hpp"
+#include "knightMovement.hpp"
 
 // White's Pieces
 uint64_t whitePawn =   0x000000000000FF00;
@@ -19,28 +22,18 @@ uint64_t blackBishop = 0x2400000000000000;
 uint64_t blackQueen =  0x1000000000000000;
 uint64_t blackKing =   0x0800000000000000;
 
-void print_board(uint64_t num){
-    uint64_t mask = UINT64_MAX;
-    int i;
-    int shift = 63;
-    for(i = 0; i < 8; i++){
-        int j;
-        for(j = 0; j <8; j++){
-            uint64_t bit = num & mask;
-            bit >>= shift;
-            printf("%lld ", bit);
-            mask >>= 1;
-            shift--;
-        }
-        printf("\n");
-    }
-}
-
 int main(){
-    uint64_t board = whitePawn | whiteRook | whiteKnight | whiteBishop | whiteQueen | whiteKing |
-                        blackPawn | blackRook | blackKnight | blackBishop | blackQueen | blackKing;
-    // print_board(board);
+    uint64_t whiteBoard = whitePawn | whiteRook | whiteKnight | whiteBishop | whiteQueen | whiteKing;
+    uint64_t blackBoard = blackPawn | blackRook | blackKnight | blackBishop | blackQueen | blackKing;
+    uint64_t board = whiteBoard | blackBoard;
+
+    print_board(board);
     std::unordered_set<int> moves = generate_bishop(whiteBishop);
+
+    for(int elt : moves){
+        std::cout << elt << " ";
+    }
+    std::cout << std::endl;
     
     return 0;
 }

@@ -143,14 +143,3 @@ uint64_t move_bishop(uint64_t bishop, int direction, int n){
     }
     return bishop;
 }
-
-int main(){
-    uint64_t bishop = 0x0000000800000000;
-    print_board(bishop);
-    std::unordered_set<int> moves = generate_bishop(bishop);
-    for(int elt : moves){
-        std::cout << elt << " ";
-    }
-    std::cout << std::endl;
-    return 0;
-}
