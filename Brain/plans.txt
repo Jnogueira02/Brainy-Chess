@@ -1,1 +1,6 @@
 - Generate set of moves for each piece
+    -  isBlocked?
+    - isOccupied?
+    - notInCheck?
+- Move printBoard()
+- Combine all movement into one file?
