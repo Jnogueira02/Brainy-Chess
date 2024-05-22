@@ -2,5 +2,4 @@
     -  isBlocked?
     - isOccupied?
     - notInCheck?
-- Move printBoard()
-- Combine all movement into one file?
+- isBlocked should apply to enemy pieces (you must capture to advance)
