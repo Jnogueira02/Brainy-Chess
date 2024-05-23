@@ -127,9 +127,14 @@ std::unordered_set<int> generate_bishop(uint64_t bishop, uint64_t whiteBoard, ui
 
     while(tempBishop != maxMain){
         tempBishop <<= 9;
-        // If the prospective square is occupied by one of your own pieces, break!!
+        // If the prospective square is occupied by one of your own pieces, break!! // use value so only have to call function once
         if(isOccupied(tempBishop, whiteBoard, blackBoard) == 1)
             break;
+        else if(isOccupied(tempBishop, whiteBoard, blackBoard) == 2){
+            upLeft++;
+            resMoves.insert(upLeft * 9);
+            break;
+        }
         upLeft++;
         resMoves.insert(upLeft * 9);
     }
@@ -138,6 +143,11 @@ std::unordered_set<int> generate_bishop(uint64_t bishop, uint64_t whiteBoard, ui
         tempBishop >>= 9;
         if(isOccupied(tempBishop, whiteBoard, blackBoard) == 1)
             break;
+        else if(isOccupied(tempBishop, whiteBoard, blackBoard) == 2){
+            downRight++;
+            resMoves.insert(downRight * 9);
+            break;
+        }
         downRight++;
         resMoves.insert(downRight * -9);
     }
@@ -146,6 +156,11 @@ std::unordered_set<int> generate_bishop(uint64_t bishop, uint64_t whiteBoard, ui
         tempBishop <<= 7;
         if(isOccupied(tempBishop, whiteBoard, blackBoard) == 1)
             break;
+        else if(isOccupied(tempBishop, whiteBoard, blackBoard) == 2){
+            upRight++;
+            resMoves.insert(upRight * 7);
+            break;
+        }
         upRight++;
         resMoves.insert(upRight * 7);
     }
@@ -154,6 +169,11 @@ std::unordered_set<int> generate_bishop(uint64_t bishop, uint64_t whiteBoard, ui
         tempBishop >>= 7;
         if(isOccupied(tempBishop, whiteBoard, blackBoard) == 1)
             break;
+        else if(isOccupied(tempBishop, whiteBoard, blackBoard) == 2){
+            downLeft++;
+            resMoves.insert(downLeft * 9);
+            break;
+        }
         downLeft++;
         resMoves.insert(downLeft * -7);
     }
@@ -449,26 +469,26 @@ int main(){
     uint64_t blackBoard = blackPawn | blackRook | blackKnight | blackBishop | blackQueen | blackKing;
     uint64_t board = whiteBoard | blackBoard;
 
-    // uint64_t whiteLeftBishop = whiteBishop ^ 0x4;
-    // whiteLeftBishop <<= 8;
+    uint64_t whiteLeftBishop = whiteBishop ^ 0x4;
+    whiteLeftBishop <<= 8;
     // whiteLeftBishop <<= 8;
     // whiteLeftBishop <<= 8;
     
-    // std::unordered_set<int> moves = generate_bishop(whiteLeftBishop, whiteBoard, blackBoard);
-    // for(int elt : moves){
-    //     std::cout << elt << " ";
-    // }
-    // std::cout << std::endl << std::endl;
-
-    uint64_t whiteLeftRook = whiteRook ^ 0x1;
-    whiteLeftRook <<= 8;
-    whiteLeftRook <<= 8;
-    
-    std::unordered_set<int> moves = generate_rook(whiteLeftRook, whiteBoard, blackBoard);
+    std::unordered_set<int> moves = generate_bishop(whiteLeftBishop, whiteBoard, blackBoard);
     for(int elt : moves){
         std::cout << elt << " ";
     }
     std::cout << std::endl << std::endl;
+
+    // uint64_t whiteLeftRook = whiteRook ^ 0x1;
+    // whiteLeftRook <<= 8;
+    // whiteLeftRook <<= 8;
+    
+    // std::unordered_set<int> moves = generate_rook(whiteLeftRook, whiteBoard, blackBoard);
+    // for(int elt : moves){
+    //     std::cout << elt << " ";
+    // }
+    // std::cout << std::endl << std::endl;
 
     // uint64_t whiteLeftKnight = whiteKnight ^ 0x2;
     // print_board(whiteLeftKnight);
