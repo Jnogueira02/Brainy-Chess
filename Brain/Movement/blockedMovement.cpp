@@ -21,9 +21,14 @@ uint64_t blackBishop = 0x2400000000000000;
 uint64_t blackQueen =  0x1000000000000000;
 uint64_t blackKing =   0x0800000000000000;
 
-// Returns true if a move would cause a piece to occupy a square already occupied by a piece of the same color, false otherwise
-bool isOccupied(uint64_t piece, uint64_t whiteBoard){
-    return (piece | whiteBoard) == whiteBoard;
+// Returns 1 if the square is occupied by a piece of the same color, 2 if occupied by an opposing color, 0 if unoccupied
+int isOccupied(uint64_t piece, uint64_t whiteBoard, uint64_t blackBoard){
+    if ((piece | whiteBoard) == whiteBoard)
+        return 1;
+    else if((piece | blackBoard) == blackBoard)
+        return 2;
+    else
+        return 0;
 }
 
 void print_board(uint64_t num){
@@ -109,7 +114,7 @@ std::tuple<uint64_t, uint64_t> calculateMinorDiag(uint64_t piece){ //Don't have 
     else
         return std::make_tuple(0x0000000000000001ULL, 0x0000000000000001ULL);         
 }
-std::unordered_set<int> generate_bishop(uint64_t bishop, uint64_t whiteBoard){
+std::unordered_set<int> generate_bishop(uint64_t bishop, uint64_t whiteBoard, uint64_t blackBoard){
     auto[minMain, maxMain] = calculateMainDiag(bishop);
     auto[minMinor, maxMinor] = calculateMinorDiag(bishop);
     uint64_t upRight = 0;
@@ -123,7 +128,7 @@ std::unordered_set<int> generate_bishop(uint64_t bishop, uint64_t whiteBoard){
     while(tempBishop != maxMain){
         tempBishop <<= 9;
         // If the prospective square is occupied by one of your own pieces, break!!
-        if(isOccupied(tempBishop, whiteBoard))
+        if(isOccupied(tempBishop, whiteBoard, blackBoard) == 1)
             break;
         upLeft++;
         resMoves.insert(upLeft * 9);
@@ -131,7 +136,7 @@ std::unordered_set<int> generate_bishop(uint64_t bishop, uint64_t whiteBoard){
     tempBishop = bishop;
     while(tempBishop != minMain){
         tempBishop >>= 9;
-        if(isOccupied(tempBishop, whiteBoard))
+        if(isOccupied(tempBishop, whiteBoard, blackBoard) == 1)
             break;
         downRight++;
         resMoves.insert(downRight * -9);
@@ -139,7 +144,7 @@ std::unordered_set<int> generate_bishop(uint64_t bishop, uint64_t whiteBoard){
     tempBishop = bishop;
     while(tempBishop != maxMinor){
         tempBishop <<= 7;
-        if(isOccupied(tempBishop, whiteBoard))
+        if(isOccupied(tempBishop, whiteBoard, blackBoard) == 1)
             break;
         upRight++;
         resMoves.insert(upRight * 7);
@@ -147,7 +152,7 @@ std::unordered_set<int> generate_bishop(uint64_t bishop, uint64_t whiteBoard){
     tempBishop = bishop;
     while(tempBishop != minMinor){
         tempBishop >>= 7;
-        if(isOccupied(tempBishop, whiteBoard))
+        if(isOccupied(tempBishop, whiteBoard, blackBoard) == 1)
             break;
         downLeft++;
         resMoves.insert(downLeft * -7);
@@ -259,7 +264,7 @@ uint64_t move_rook(uint64_t rook, int direction, int n){
     return rook;
 }
 // Maybe have a limit of number of squares we can move in a given direction...
-std::unordered_set<int> generate_rook(uint64_t rook, uint64_t whiteBoard){
+std::unordered_set<int> generate_rook(uint64_t rook, uint64_t whiteBoard, uint64_t blackBoard){
     auto [minRank, maxRank] = calculateRank(rook);
     auto [minFile, maxFile] = calculateFile(rook);
     uint64_t tempRook = rook;
@@ -271,10 +276,10 @@ std::unordered_set<int> generate_rook(uint64_t rook, uint64_t whiteBoard){
 
     std::unordered_set<int> resMoves = {};
 
-    // # of squares to left // Is there a more efficient way to do this?
+    // # of squares to left // Is there a more efficient way to do this? // I CAN DO THIS FOR ALL THE MOVES AT ONCE!!!!!!!!!!!!!!!!!!!
     while(tempRook != maxRank){
         tempRook <<= 1;
-        if(isOccupied(tempRook, whiteBoard))
+        if(isOccupied(tempRook, whiteBoard, blackBoard) == 1)
             break;
         leftShift++;
         resMoves.insert(leftShift);
@@ -283,7 +288,7 @@ std::unordered_set<int> generate_rook(uint64_t rook, uint64_t whiteBoard){
     // # of squares to right
     while(tempRook != minRank){
         tempRook >>=  1;
-        if(isOccupied(tempRook, whiteBoard))
+        if(isOccupied(tempRook, whiteBoard, blackBoard) == 1)
             break;
         rightShift++;
         resMoves.insert(-rightShift);
@@ -292,7 +297,7 @@ std::unordered_set<int> generate_rook(uint64_t rook, uint64_t whiteBoard){
     // # of squares forwards
     while(tempRook != maxFile){
         tempRook <<= 8;
-        if(isOccupied(tempRook, whiteBoard))
+        if(isOccupied(tempRook, whiteBoard, blackBoard) == 1)
             break;
         forwardShift++;
         resMoves.insert(forwardShift * 8);
@@ -301,7 +306,7 @@ std::unordered_set<int> generate_rook(uint64_t rook, uint64_t whiteBoard){
     // # of squares backwards
     while(tempRook != minFile){
         tempRook >>= 8;
-        if(isOccupied(tempRook, whiteBoard))
+        if(isOccupied(tempRook, whiteBoard, blackBoard) == 1)
             break;
         backShift++;
         resMoves.insert(backShift * -8);
@@ -352,7 +357,7 @@ uint64_t move_knight(uint64_t knight, int direction){
 std::unordered_set<int> knightMoves = {15, 6, -10, -17, -15, -6, 10, 17};
 // Maybe store right shifts as negative numbers (can be reversed later)
 // May not be necessary to check for all masks
-std::unordered_set<int> generate_knight(uint64_t knight, uint64_t whiteBoard){
+std::unordered_set<int> generate_knight(uint64_t knight, uint64_t whiteBoard, uint64_t blackBoard){
     std::unordered_set<int> resMoves = knightMoves;
 
     // Right two columns
@@ -404,7 +409,7 @@ std::unordered_set<int> generate_knight(uint64_t knight, uint64_t whiteBoard){
             tempKnight <<= shift;
         else
             tempKnight >>= -shift;
-        if(isOccupied(tempKnight, whiteBoard))
+        if(isOccupied(tempKnight, whiteBoard, blackBoard) == 1)
             resMoves.erase(shift);
         tempKnight = knight;
     }
@@ -425,30 +430,30 @@ int main(){
     // whiteLeftBishop <<= 8;
     // whiteLeftBishop <<= 8;
     
-    // std::unordered_set<int> moves = generate_bishop(whiteLeftBishop, whiteBoard);
+    // std::unordered_set<int> moves = generate_bishop(whiteLeftBishop, whiteBoard, blackBoard);
     // for(int elt : moves){
     //     std::cout << elt << " ";
     // }
     // std::cout << std::endl << std::endl;
 
-    // uint64_t whiteLeftRook = whiteRook ^ 0x1;
-    // whiteLeftRook <<= 8;
-    // whiteLeftRook <<= 8;
+    uint64_t whiteLeftRook = whiteRook ^ 0x1;
+    whiteLeftRook <<= 8;
+    whiteLeftRook <<= 8;
     
-    // std::unordered_set<int> moves = generate_rook(whiteLeftRook, whiteBoard);
-    // for(int elt : moves){
-    //     std::cout << elt << " ";
-    // }
-    // std::cout << std::endl << std::endl;
-
-    uint64_t whiteLeftKnight = whiteKnight ^ 0x2;
-    print_board(whiteLeftKnight);
-
-    std::unordered_set<int> moves = generate_knight(whiteLeftKnight, whiteBoard);
+    std::unordered_set<int> moves = generate_rook(whiteLeftRook, whiteBoard, blackBoard);
     for(int elt : moves){
         std::cout << elt << " ";
     }
     std::cout << std::endl << std::endl;
+
+    // uint64_t whiteLeftKnight = whiteKnight ^ 0x2;
+    // print_board(whiteLeftKnight);
+
+    // std::unordered_set<int> moves = generate_knight(whiteLeftKnight, whiteBoard, blackBoard);
+    // for(int elt : moves){
+    //     std::cout << elt << " ";
+    // }
+    // std::cout << std::endl << std::endl;
 
     return 0;
 }
