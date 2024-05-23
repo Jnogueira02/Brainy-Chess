@@ -279,8 +279,15 @@ std::unordered_set<int> generate_rook(uint64_t rook, uint64_t whiteBoard, uint64
     // # of squares to left // Is there a more efficient way to do this? // I CAN DO THIS FOR ALL THE MOVES AT ONCE!!!!!!!!!!!!!!!!!!!
     while(tempRook != maxRank){
         tempRook <<= 1;
+        // Occupied by own piece
         if(isOccupied(tempRook, whiteBoard, blackBoard) == 1)
             break;
+        // Occupied by enemy piece
+        else if(isOccupied(tempRook, whiteBoard, blackBoard) == 2){
+            leftShift++;
+            resMoves.insert(leftShift);
+            break;
+        }
         leftShift++;
         resMoves.insert(leftShift);
     }
@@ -288,8 +295,15 @@ std::unordered_set<int> generate_rook(uint64_t rook, uint64_t whiteBoard, uint64
     // # of squares to right
     while(tempRook != minRank){
         tempRook >>=  1;
+        // Occupied by own piece
         if(isOccupied(tempRook, whiteBoard, blackBoard) == 1)
             break;
+        // Occupied by enemy piece
+        else if(isOccupied(tempRook, whiteBoard, blackBoard) == 2){
+            rightShift++;
+            resMoves.insert(rightShift);
+            break;
+        }
         rightShift++;
         resMoves.insert(-rightShift);
     }
@@ -299,6 +313,11 @@ std::unordered_set<int> generate_rook(uint64_t rook, uint64_t whiteBoard, uint64
         tempRook <<= 8;
         if(isOccupied(tempRook, whiteBoard, blackBoard) == 1)
             break;
+        else if(isOccupied(tempRook, whiteBoard, blackBoard) == 2){
+            forwardShift++;
+            resMoves.insert(forwardShift * 8);
+            break;
+        }
         forwardShift++;
         resMoves.insert(forwardShift * 8);
     }
@@ -308,6 +327,11 @@ std::unordered_set<int> generate_rook(uint64_t rook, uint64_t whiteBoard, uint64
         tempRook >>= 8;
         if(isOccupied(tempRook, whiteBoard, blackBoard) == 1)
             break;
+        else if(isOccupied(tempRook, whiteBoard, blackBoard) == 2){
+            backShift++;
+            resMoves.insert(backShift * -8);
+            break;
+        }
         backShift++;
         resMoves.insert(backShift * -8);
     }
