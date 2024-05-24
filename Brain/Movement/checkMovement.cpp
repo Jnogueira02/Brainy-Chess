@@ -20,39 +20,39 @@ struct Board{
     uint64_t blackKnight;
     uint64_t blackPawn;
 
-    int whiteKingPos = 4;
-    int whiteQueenPos = 5;
-    int whiteRook1Pos = 8;
-    int whiteRook2Pos = 1;
-    int whiteBishop1Pos = 6;
-    int whiteBishop2Pos = 3;
-    int whiteKnight1Pos = 7;
-    int whiteKnight2Pos = 2;
-    int whitePawn1Pos = 16;
-    int whitePawn2Pos = 15;
-    int whitePawn3Pos = 14;
-    int whitePawn4Pos = 13;
-    int whitePawn5Pos = 12;
-    int whitePawn6Pos = 11;
-    int whitePawn7Pos = 10;
-    int whitePawn8Pos = 9;
+    // int whiteKingPos = 4;
+    // int whiteQueenPos = 5;
+    // int whiteRook1Pos = 8;
+    // int whiteRook2Pos = 1;
+    // int whiteBishop1Pos = 6;
+    // int whiteBishop2Pos = 3;
+    // int whiteKnight1Pos = 7;
+    // int whiteKnight2Pos = 2;
+    // int whitePawn1Pos = 16;
+    // int whitePawn2Pos = 15;
+    // int whitePawn3Pos = 14;
+    // int whitePawn4Pos = 13;
+    // int whitePawn5Pos = 12;
+    // int whitePawn6Pos = 11;
+    // int whitePawn7Pos = 10;
+    // int whitePawn8Pos = 9;
 
-    int blackKingPos = 60;
-    int blackQueenPos = 61;
-    int blackRook1Pos = 64;
-    int blackRook2Pos = 57;
-    int blackBishop1Pos = 62;
-    int blackBishop2Pos = 59;
-    int blackKnight1Pos = 63;
-    int blackKnight2Pos = 58;
-    int blackPawn1Pos = 57;
-    int blackPawn2Pos = 56;
-    int blackPawn3Pos = 55;
-    int blackPawn4Pos = 54;
-    int blackPawn5Pos = 53;
-    int blackPawn6Pos = 52;
-    int blackPawn7Pos = 51;
-    int blackPawn8Pos = 50;
+    // int blackKingPos = 60;
+    // int blackQueenPos = 61;
+    // int blackRook1Pos = 64;
+    // int blackRook2Pos = 57;
+    // int blackBishop1Pos = 62;
+    // int blackBishop2Pos = 59;
+    // int blackKnight1Pos = 63;
+    // int blackKnight2Pos = 58;
+    // int blackPawn1Pos = 57;
+    // int blackPawn2Pos = 56;
+    // int blackPawn3Pos = 55;
+    // int blackPawn4Pos = 54;
+    // int blackPawn5Pos = 53;
+    // int blackPawn6Pos = 52;
+    // int blackPawn7Pos = 51;
+    // int blackPawn8Pos = 50;
 
 
     Board(uint64_t whiteKing, uint64_t whiteQueen, uint64_t whiteRook, uint64_t whiteBishop, uint64_t whiteKnight, uint64_t whitePawn,
@@ -98,8 +98,16 @@ int isInCheck(Board board){
     uint64_t whiteBoard = board.makeWhiteBoard();
     uint64_t blackBoard = board.makeBlackBoard();
 
-    std::unordered_set leftRookMoves = generate_rook(board.whiteRook, whiteBoard, blackBoard); // Need to ^
-    std::unordered_set leftBishopMoves = generate_bishop(board.whiteBishop, whiteBoard, blackBoard); // Need to ^
+    uint64_t whiteRook1 = board.whiteRook ^ (1);
+    uint64_t whiteRook2 = board.whiteRook ^ (1 << 7);
+    uint64_t whiteBishop1 = board.whiteBishop ^ (1 << 2);
+    uint64_t whiteBishop2 = board.whiteBishop ^ (1 << 5);
+    uint64_t whiteKnight1 = board.whiteKnight ^ (1 << 1);
+    uint64_t whiteKnight2 = board.whiteKnight ^ (1 << 6);
+
+    // When taking enemy piece, check if king and return 1
+
+    return 0;
 }
 
 // White's Pieces
@@ -148,70 +156,73 @@ void print_board(uint64_t num){
 /*******************************************************************************************************************************************/
 // DIAGONAL MOVEMENT
 std::tuple<uint64_t, uint64_t> calculateMainDiag(uint64_t piece){
-    if(piece & 0x0100000000000000ULL)
-        return std::make_tuple(0x0100000000000000ULL, 0x0100000000000000ULL);
-    else if(piece & 0x0201000000000000ULL)
-        return std::make_tuple(0x0001000000000000ULL, 0x0200000000000000ULL);
-    else if(piece & 0x0402010000000000ULL)
-        return std::make_tuple(0x0000010000000000ULL, 0x0400000000000000ULL);
-    else if(piece & 0x0804020100000000ULL)
-        return std::make_tuple(0x0000000100000000ULL, 0x0800000000000000ULL);
-    else if(piece & 0x1008040201000000ULL)
-        return std::make_tuple(0x0000000001000000ULL, 0x1000000000000000ULL);
-    else if(piece & 0x2010080402010000ULL)
-        return std::make_tuple(0x0000000000010000ULL, 0x2000000000000000ULL);
-    else if(piece & 0x4020100804020100ULL)
-        return std::make_tuple(0x0000000000000100ULL, 0x4000000000000000ULL);
-    else if(piece & 0x8040201008040201ULL)
-        return std::make_tuple(0x0000000000000001ULL, 0x8000000000000000ULL);
-    else if(piece & 0x0080402010080402ULL)
-        return std::make_tuple(0x0000000000000002ULL, 0x0080000000000000ULL);
-    else if(piece & 0x0000804020100804ULL)
-        return std::make_tuple(0x0000000000000004ULL, 0x0000800000000000ULL);
-    else if(piece & 0x0000008040201008ULL)
-        return std::make_tuple(0x0000008000000008ULL, 0x0000008000000000ULL);
-    else if(piece & 0x0000000080402010ULL)
-        return std::make_tuple(0x0000000000000010ULL, 0x0000000080000000ULL);
-    else if(piece & 0x0000000000804020ULL)
-        return std::make_tuple(0x0000000000000020ULL, 0x0000000000800000ULL);
-    else if(piece & 0x0000000000008040ULL)
-        return std::make_tuple(0x0000000000000040ULL, 0x0000000000008000ULL);
+    if(piece & 0x0100000000000000)
+        return std::make_tuple(0x0100000000000000, 0x0100000000000000);
+    else if(piece & 0x0201000000000000)
+        return std::make_tuple(0x0001000000000000, 0x0200000000000000);
+    else if(piece & 0x0402010000000000)
+        return std::make_tuple(0x0000010000000000, 0x0400000000000000);
+    else if(piece & 0x0804020100000000)
+        return std::make_tuple(0x0000000100000000, 0x0800000000000000);
+    else if(piece & 0x1008040201000000)
+        return std::make_tuple(0x0000000001000000, 0x1000000000000000);
+    else if(piece & 0x2010080402010000)
+        return std::make_tuple(0x0000000000010000, 0x2000000000000000);
+    else if(piece & 0x4020100804020100)
+        return std::make_tuple(0x0000000000000100, 0x4000000000000000);
+    else if(piece & 0x8040201008040201)
+        return std::make_tuple(0x0000000000000001, 0x8000000000000000);
+    else if(piece & 0x0080402010080402)
+        return std::make_tuple(0x0000000000000002, 0x0080000000000000);
+    else if(piece & 0x0000804020100804)
+        return std::make_tuple(0x0000000000000004, 0x0000800000000000);
+    else if(piece & 0x0000008040201008)
+        return std::make_tuple(0x0000008000000008, 0x0000008000000000);
+    else if(piece & 0x0000000080402010)
+        return std::make_tuple(0x0000000000000010, 0x0000000080000000);
+    else if(piece & 0x0000000000804020)
+        return std::make_tuple(0x0000000000000020, 0x0000000000800000);
+    else if(piece & 0x0000000000008040)
+        return std::make_tuple(0x0000000000000040, 0x0000000000008000);
     else
-        return std::make_tuple(0x0000000000000080ULL, 0x0000000000000080ULL);
+        return std::make_tuple(0x0000000000000080, 0x0000000000000080);
 }
 std::tuple<uint64_t, uint64_t> calculateMinorDiag(uint64_t piece){ //Don't have to & for unnecessary colors
-    if(piece & 0x8000000000000000ULL)
-        return std::make_tuple(0x8000000000000000ULL, 0x8000000000000000ULL);
-    else if(piece & 0x4080000000000000ULL)
-        return std::make_tuple(0x0080000000000000ULL, 0x4000000000000000ULL);
-    else if(piece & 0x2040800000000000ULL)
-        return std::make_tuple(0x0000800000000000ULL, 0x2000000000000000ULL);
-    else if(piece & 0x1020408000000000ULL)
-        return std::make_tuple(0x0000008000000000ULL, 0x1000000000000000ULL);
-    else if(piece & 0x0810204080000000ULL)
-        return std::make_tuple(0x0000000080000000ULL, 0x0800000000000000ULL);
-    else if(piece & 0x0408102040800000ULL)
-        return std::make_tuple(0x0000000000800000ULL, 0x0400000000000000ULL);
-    else if(piece & 0x0204081020408000ULL)
-        return std::make_tuple(0x0000000000008000ULL, 0x0200000000000000ULL);
-    else if(piece & 0x0102040810204080ULL)
-        return std::make_tuple(0x0000000000000080ULL, 0x0100000000000000ULL);
-    else if(piece & 0x0001020408102040ULL)
-        return std::make_tuple(0x0000000000000040ULL, 0x0001000000000000ULL);
-    else if(piece & 0x0000010204081020ULL)
-        return std::make_tuple(0x0000000000000020ULL, 0x0000010000000000ULL);  
-    else if(piece & 0x0000000102040810ULL)
-        return std::make_tuple(0x0000000000000010ULL, 0x0000000100000000ULL); 
-    else if(piece & 0x0000000001020408ULL)
-        return std::make_tuple(0x0000000000000008ULL, 0x0000000001000000ULL);   
-    else if(piece & 0x0000000000010204ULL)
-        return std::make_tuple(0x0000000000000004ULL, 0x0000000000010000ULL);
-    else if(piece & 0x0000000000000102ULL)
-        return std::make_tuple(0x0000000000000002ULL, 0x0000000000000100ULL);
+    if(piece & 0x8000000000000000)
+        return std::make_tuple(0x8000000000000000, 0x8000000000000000);
+    else if(piece & 0x4080000000000000)
+        return std::make_tuple(0x0080000000000000, 0x4000000000000000);
+    else if(piece & 0x2040800000000000)
+        return std::make_tuple(0x0000800000000000, 0x2000000000000000);
+    else if(piece & 0x1020408000000000)
+        return std::make_tuple(0x0000008000000000, 0x1000000000000000);
+    else if(piece & 0x0810204080000000)
+        return std::make_tuple(0x0000000080000000, 0x0800000000000000);
+    else if(piece & 0x0408102040800000)
+        return std::make_tuple(0x0000000000800000, 0x0400000000000000);
+    else if(piece & 0x0204081020408000)
+        return std::make_tuple(0x0000000000008000, 0x0200000000000000);
+    else if(piece & 0x0102040810204080)
+        return std::make_tuple(0x0000000000000080, 0x0100000000000000);
+    else if(piece & 0x0001020408102040)
+        return std::make_tuple(0x0000000000000040, 0x0001000000000000);
+    else if(piece & 0x0000010204081020)
+        return std::make_tuple(0x0000000000000020, 0x0000010000000000);  
+    else if(piece & 0x0000000102040810)
+        return std::make_tuple(0x0000000000000010, 0x0000000100000000); 
+    else if(piece & 0x0000000001020408)
+        return std::make_tuple(0x0000000000000008, 0x0000000001000000);   
+    else if(piece & 0x0000000000010204)
+        return std::make_tuple(0x0000000000000004, 0x0000000000010000);
+    else if(piece & 0x0000000000000102)
+        return std::make_tuple(0x0000000000000002, 0x0000000000000100);
     else
-        return std::make_tuple(0x0000000000000001ULL, 0x0000000000000001ULL);         
+        return std::make_tuple(0x0000000000000001, 0x0000000000000001);         
 }
-std::unordered_set<int> generate_bishop(uint64_t bishop, uint64_t whiteBoard, uint64_t blackBoard){
+std::unordered_set<int> generate_bishop(uint64_t bishop, Board board){
+    uint64_t whiteBoard = board.makeWhiteBoard();
+    uint64_t blackBoard = board.makeBlackBoard();
+
     auto[minMain, maxMain] = calculateMainDiag(bishop);
     auto[minMinor, maxMinor] = calculateMinorDiag(bishop);
     uint64_t upRight = 0;
@@ -302,58 +313,58 @@ uint64_t move_bishop(uint64_t bishop, int direction, int n){
     and minValue is the rightmost*/ 
 std::tuple<uint64_t, uint64_t> calculateRank(uint64_t piece){
     // Rank 1
-    if(piece & 0x00000000000000FFULL)
-        return std::make_tuple(0x0000000000000001ULL, 0x0000000000000080ULL);
+    if(piece & 0x00000000000000FF)
+        return std::make_tuple(0x0000000000000001, 0x0000000000000080);
     // Rank 2
-    else if(piece & 0x000000000000FF00ULL)
-        return std::make_tuple(0x0000000000000100ULL, 0x0000000000008000ULL);
+    else if(piece & 0x000000000000FF00)
+        return std::make_tuple(0x0000000000000100, 0x0000000000008000);
     // Rank 3
-    else if(piece & 0x0000000000FF0000ULL)
-        return std::make_tuple(0x0000000000010000ULL, 0x0000000000800000ULL);
+    else if(piece & 0x0000000000FF0000)
+        return std::make_tuple(0x0000000000010000, 0x0000000000800000);
     // Rank 4
-    else if(piece & 0x00000000FF000000ULL)
-        return std::make_tuple(0x0000000001000000ULL, 0x0000000080000000ULL);
+    else if(piece & 0x00000000FF000000)
+        return std::make_tuple(0x0000000001000000, 0x0000000080000000);
     // Rank 5
-    else if(piece & 0x000000FF00000000ULL)
-        return std::make_tuple(0x0000000100000000ULL, 0x0000008000000000ULL);
+    else if(piece & 0x000000FF00000000)
+        return std::make_tuple(0x0000000100000000, 0x0000008000000000);
     // Rank 6
-    else if(piece & 0x0000FF0000000000ULL)
-        return std::make_tuple(0x0000010000000000ULL, 0x0000800000000000ULL);
+    else if(piece & 0x0000FF0000000000)
+        return std::make_tuple(0x0000010000000000, 0x0000800000000000);
     // Rank 7
-    else if(piece & 0x00FF000000000000ULL)
-        return std::make_tuple(0x0001000000000000ULL, 0x0080000000000000ULL);
+    else if(piece & 0x00FF000000000000)
+        return std::make_tuple(0x0001000000000000, 0x0080000000000000);
     // Rank 8
     else
-        return std::make_tuple(0x0100000000000000ULL, 0x8000000000000000ULL);
+        return std::make_tuple(0x0100000000000000, 0x8000000000000000);
 }
 /* Return inclusive tuple (minValue, maxValue),
     where maxValue is the forwardmost square of a given rank,
     and minValue is the backmost*/ 
 std::tuple<uint64_t, uint64_t> calculateFile(uint64_t piece){
     // A File
-    if(piece & 0x8080808080808080ULL)
-        return std::make_tuple(0x0000000000000080ULL, 0x8000000000000000ULL);
+    if(piece & 0x8080808080808080)
+        return std::make_tuple(0x0000000000000080, 0x8000000000000000);
     // B File
-    else if(piece & 0x4040404040404040ULL)
-        return std::make_tuple(0x0000000000000040ULL, 0x4000000000000000ULL);
+    else if(piece & 0x4040404040404040)
+        return std::make_tuple(0x0000000000000040, 0x4000000000000000);
     // C File
-    else if(piece & 0x2020202020202020ULL)
-        return std::make_tuple(0x0000000000000020ULL, 0x2000000000000000ULL);
+    else if(piece & 0x2020202020202020)
+        return std::make_tuple(0x0000000000000020, 0x2000000000000000);
     // D File
-    else if(piece & 0x1010101010101010ULL)
-        return std::make_tuple(0x0000000000000010ULL, 0x1000000000000000ULL);
+    else if(piece & 0x1010101010101010)
+        return std::make_tuple(0x0000000000000010, 0x1000000000000000);
     // E File
-    else if(piece & 0x0808080808080808ULL)
-        return std::make_tuple(0x0000000000000008ULL, 0x0800000000000000ULL);
+    else if(piece & 0x0808080808080808)
+        return std::make_tuple(0x0000000000000008, 0x0800000000000000);
     // F File
-    else if(piece & 0x0404040404040404ULL)
-        return std::make_tuple(0x0000000000000004ULL, 0x0400000000000000ULL);
+    else if(piece & 0x0404040404040404)
+        return std::make_tuple(0x0000000000000004, 0x0400000000000000);
     // G File
-    else if(piece & 0x0202020202020202ULL)
-        return std::make_tuple(0x0000000000000002ULL, 0x0200000000000000ULL);
+    else if(piece & 0x0202020202020202)
+        return std::make_tuple(0x0000000000000002, 0x0200000000000000);
     // H File
     else
-        return std::make_tuple(0x0000000000000001ULL, 0x0100000000000000ULL);
+        return std::make_tuple(0x0000000000000001, 0x0100000000000000);
 }
 // Would direct memory manipulation be more valuable (void method) (or even possible?) or returning the new bit string?
 // 0-->forward, 1-->right, 2-->backward, 3-->left // Is there a way to do this w/o ifs?
@@ -381,7 +392,10 @@ uint64_t move_rook(uint64_t rook, int direction, int n){
     return rook;
 }
 // Maybe have a limit of number of squares we can move in a given direction...
-std::unordered_set<int> generate_rook(uint64_t rook, uint64_t whiteBoard, uint64_t blackBoard){
+std::unordered_set<int> generate_rook(uint64_t rook, Board board){
+    uint64_t whiteBoard = board.makeWhiteBoard();
+    uint64_t blackBoard = board.makeBlackBoard();
+
     auto [minRank, maxRank] = calculateRank(rook);
     auto [minFile, maxFile] = calculateFile(rook);
     uint64_t tempRook = rook;
@@ -498,7 +512,10 @@ uint64_t move_knight(uint64_t knight, int direction){
 std::unordered_set<int> knightMoves = {15, 6, -10, -17, -15, -6, 10, 17};
 // Maybe store right shifts as negative numbers (can be reversed later)
 // May not be necessary to check for all masks
-std::unordered_set<int> generate_knight(uint64_t knight, uint64_t whiteBoard, uint64_t blackBoard){
+std::unordered_set<int> generate_knight(uint64_t knight, Board board){
+    uint64_t whiteBoard = board.makeWhiteBoard();
+    uint64_t blackBoard = board.makeBlackBoard();
+
     std::unordered_set<int> resMoves = knightMoves;
 
     // Right two columns
@@ -561,35 +578,34 @@ std::unordered_set<int> generate_knight(uint64_t knight, uint64_t whiteBoard, ui
 
 
 int main(){
-    uint64_t whiteBoard = whitePawn | whiteRook | whiteKnight | whiteBishop | whiteQueen | whiteKing;
-    uint64_t blackBoard = blackPawn | blackRook | blackKnight | blackBishop | blackQueen | blackKing;
-    uint64_t board = whiteBoard | blackBoard;
+    Board board(whitePawn, whiteRook, whiteKnight, whiteBishop, whiteQueen, whiteKing, blackPawn, blackRook, blackKnight, blackBishop, blackQueen, blackKing);
+    
 
-    uint64_t whiteLeftBishop = whiteBishop ^ 0x4;
+    uint64_t whiteLeftBishop = board.whiteBishop ^ 0x4;
     whiteLeftBishop <<= 8;
     // whiteLeftBishop <<= 8;
     // whiteLeftBishop <<= 8;
     
-    std::unordered_set<int> moves = generate_bishop(whiteLeftBishop, whiteBoard, blackBoard);
+    std::unordered_set<int> moves = generate_bishop(whiteLeftBishop, board);
     for(int elt : moves){
         std::cout << elt << " ";
     }
     std::cout << std::endl << std::endl;
 
-    // uint64_t whiteLeftRook = whiteRook ^ 0x1;
+    // uint64_t whiteLeftRook = board.whiteRook ^ 0x1;
     // whiteLeftRook <<= 8;
     // whiteLeftRook <<= 8;
     
-    // std::unordered_set<int> moves = generate_rook(whiteLeftRook, whiteBoard, blackBoard);
+    // std::unordered_set<int> moves = generate_rook(whiteLeftRook, board);
     // for(int elt : moves){
     //     std::cout << elt << " ";
     // }
     // std::cout << std::endl << std::endl;
 
-    // uint64_t whiteLeftKnight = whiteKnight ^ 0x2;
+    // uint64_t whiteLeftKnight = board.whiteKnight ^ 0x2;
     // print_board(whiteLeftKnight);
 
-    // std::unordered_set<int> moves = generate_knight(whiteLeftKnight, whiteBoard, blackBoard);
+    // std::unordered_set<int> moves = generate_knight(whiteLeftKnight, board);
     // for(int elt : moves){
     //     std::cout << elt << " ";
     // }
