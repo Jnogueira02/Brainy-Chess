@@ -3,3 +3,4 @@
     - isOccupied?
     - notInCheck?
 - isBlocked should apply to enemy pieces (you must capture to advance)
+- isInCheck

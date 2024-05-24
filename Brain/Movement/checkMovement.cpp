@@ -5,6 +5,103 @@
 #include <tuple>
 #include <unordered_set>
 
+struct Board{
+    uint64_t whiteKing;
+    uint64_t whiteQueen;
+    uint64_t whiteRook;
+    uint64_t whiteBishop;
+    uint64_t whiteKnight;
+    uint64_t whitePawn;
+
+    uint64_t blackKing;
+    uint64_t blackQueen;
+    uint64_t blackRook;
+    uint64_t blackBishop;
+    uint64_t blackKnight;
+    uint64_t blackPawn;
+
+    int whiteKingPos = 4;
+    int whiteQueenPos = 5;
+    int whiteRook1Pos = 8;
+    int whiteRook2Pos = 1;
+    int whiteBishop1Pos = 6;
+    int whiteBishop2Pos = 3;
+    int whiteKnight1Pos = 7;
+    int whiteKnight2Pos = 2;
+    int whitePawn1Pos = 16;
+    int whitePawn2Pos = 15;
+    int whitePawn3Pos = 14;
+    int whitePawn4Pos = 13;
+    int whitePawn5Pos = 12;
+    int whitePawn6Pos = 11;
+    int whitePawn7Pos = 10;
+    int whitePawn8Pos = 9;
+
+    int blackKingPos = 60;
+    int blackQueenPos = 61;
+    int blackRook1Pos = 64;
+    int blackRook2Pos = 57;
+    int blackBishop1Pos = 62;
+    int blackBishop2Pos = 59;
+    int blackKnight1Pos = 63;
+    int blackKnight2Pos = 58;
+    int blackPawn1Pos = 57;
+    int blackPawn2Pos = 56;
+    int blackPawn3Pos = 55;
+    int blackPawn4Pos = 54;
+    int blackPawn5Pos = 53;
+    int blackPawn6Pos = 52;
+    int blackPawn7Pos = 51;
+    int blackPawn8Pos = 50;
+
+
+    Board(uint64_t whiteKing, uint64_t whiteQueen, uint64_t whiteRook, uint64_t whiteBishop, uint64_t whiteKnight, uint64_t whitePawn,
+          uint64_t blackKing, uint64_t blackQueen, uint64_t blackRook, uint64_t blackBishop, uint64_t blackKnight, uint64_t blackPawn): 
+          whiteKing(whiteKing), whiteQueen(whiteQueen), whiteRook(whiteRook), whiteBishop(whiteBishop), whiteKnight(whiteKnight), whitePawn(whitePawn),
+          blackKing(blackKing), blackQueen(blackQueen), blackRook(blackRook), blackBishop(blackBishop), blackKnight(blackKnight), blackPawn(blackPawn){}
+
+    uint64_t makeWhiteBoard(){
+        return whiteKing | whiteQueen | whiteRook | whiteBishop | whiteKnight | whitePawn;
+    }
+
+    uint64_t makeBlackBoard(){
+        return blackKing | blackQueen | blackRook | blackBishop | blackKnight | blackPawn;
+    }
+
+    uint64_t makeBoard(){
+        return makeWhiteBoard() | makeBlackBoard();
+    }
+
+    void print_board(){
+        uint64_t num = makeBoard();
+        uint64_t mask = UINT64_MAX;
+        int i;
+        int shift = 63;
+        std::cout << std::endl;
+        for(i = 0; i < 8; i++){
+            int j;
+            for(j = 0; j <8; j++){
+                uint64_t bit = num & mask;
+                bit >>= shift;
+                std::cout << bit << " ";
+                mask >>= 1;
+                shift--;
+            }
+            std::cout << std::endl;
+        }
+        std::cout << std::endl;
+    }
+
+};
+
+int isInCheck(Board board){
+    uint64_t whiteBoard = board.makeWhiteBoard();
+    uint64_t blackBoard = board.makeBlackBoard();
+
+    std::unordered_set leftRookMoves = generate_rook(board.whiteRook, whiteBoard, blackBoard); // Need to ^
+    std::unordered_set leftBishopMoves = generate_bishop(board.whiteBishop, whiteBoard, blackBoard); // Need to ^
+}
+
 // White's Pieces
 uint64_t whitePawn =   0x000000000000FF00;
 uint64_t whiteRook =   0x0000000000000081;
